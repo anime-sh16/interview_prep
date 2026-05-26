@@ -17,6 +17,7 @@ Each topic is self-contained and includes:
 | File | Description |
 |------|-------------|
 | [`attention.py`](transformer/attention.py) | Multi-head attention with support for self-attention, causal masking, and cross-attention |
+| [`feedforward.py`](transformer/feedforward.py) | Position-wise feed-forward network with GELU activation and configurable hidden dimension |
 
 ---
 
