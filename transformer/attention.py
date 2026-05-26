@@ -27,7 +27,7 @@ class MultiHeadAttention(nn.Module):
         res = matrix(x)
         return res.view(batch_size, seq_length, self.num_heads, self.head_dim).transpose(1, 2)
     
-    def forward(self, x, encoder_x = None, mask_bool = False):
+    def forward(self, x, mask = None, encoder_x = None):
         batch_size, seq_length, _ = x.size()
         
         q = self._project_and_reshape(self.q, x) # (B, H, L, D)
@@ -40,10 +40,8 @@ class MultiHeadAttention(nn.Module):
 
         attn = torch.matmul(q, k.transpose(-1, -2)) / self.head_dim**0.5 # (B, H, L, L_e)
         
-        if mask_bool:
-            dtype = attn.dtype
-            curr_mask = torch.tril(torch.ones(seq_length, seq_length, device=attn.device)).unsqueeze(0).unsqueeze(0).bool()
-            attn = attn.masked_fill(~curr_mask, torch.finfo(dtype).min)
+        if mask is not None:
+            attn = attn.masked_fill(~mask, torch.finfo(attn.dtype).min)
         
         attn = F.softmax(attn, dim=-1)
         attn = self.dropout(attn)
