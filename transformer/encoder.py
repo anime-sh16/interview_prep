@@ -2,7 +2,7 @@ import torch.nn as nn
 
 from transformer import MultiHeadAttention, FeedForward
 
-class Encoder(nn.Module):
+class EncoderLayer(nn.Module):
     def __init__(self, num_heads: int, d_model: int, d_ff: int | None = None, dropout: float = 0.0):
         super().__init__()
         
